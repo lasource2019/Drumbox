@@ -1,0 +1,24 @@
+#coding:utf-8
+import pygame
+
+'''
+Création de la fenêtre graphique + insertion de l'image de fond
+'''
+res = (800, 450)
+pygame.init()
+pygame.display.set_caption("Drumbox")
+
+fenetre_drumbox = pygame.display.set_mode(res)
+drumbox_image = pygame.image.load("LaDrumbox.png")
+fenetre_drumbox.blit(drumbox_image, [0, 0])
+pygame.display.flip()                
+
+
+launched = True
+while launched:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            launched = False
+
+
+pygame.quit()
