@@ -1,9 +1,8 @@
 #coding:utf-8
 import pygame
+from pygame.locals import *
 
-'''
-Création de la fenêtre graphique + insertion de l'image de fond
-'''
+#Création de la fenêtre graphique + insertion de l'image de fond
 res = (800, 450)
 pygame.init()
 pygame.display.set_caption("Drumbox")
@@ -13,12 +12,48 @@ drumbox_image = pygame.image.load("LaDrumbox.png")
 fenetre_drumbox.blit(drumbox_image, [0, 0])
 pygame.display.flip()                
 
+pygame.key.set_repeat(400, 30)
 
-launched = True
+#Fermeture de la fenêtre lorsque l'on appuie sur la croix rouge
+launched = True                 
 while launched:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             launched = False
+            
+
+#Affectation des touches à une image
+    if event.type == KEYDOWN:
+        if event.key == K_q:
+            drumbox_image = pygame.image.load("DrumboxKick.png")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+            drumbox_image = pygame.image.load("LaDrumbox.png")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+        if event.key == K_w:
+            drumbox_image = pygame.image.load("Drumbox-Snare.png")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+            drumbox_image = pygame.image.load("LaDrumbox.png")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+        if event.key == K_a:
+            drumbox_image = pygame.image.load("Drumbox-Crash.png")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+            drumbox_image = pygame.image.load("LaDrumbox.png")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+        if event.key == K_s:
+            drumbox_image = pygame.image.load("Clap.gif")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+            drumbox_image = pygame.image.load("LaDrumbox.png")
+            fenetre_drumbox.blit(drumbox_image, [0, 0])
+            pygame.display.flip()
+            
 
 
 pygame.quit()
+
