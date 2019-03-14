@@ -1,0 +1,17 @@
+import numpy as np
+import sounddevice as sd
+
+sd.default.samplerate = 44100
+fs = 440
+
+time = 2.0
+frequency = 440
+# définir le temps 
+samples = np.arange(44100 * time) / 44100.0
+# convertir en onde sinusoïdale de fréquence f de formule w(t) = A*sin(2*pi*f*t)
+onde = 10000 * np.sin(2 * np.pi * frequency * samples)
+# Converir en format onde (16 bits)
+ond_onde = np.array(onde, dtype=np.int16)
+
+
+sd.play(ond_onde, blocking=True)
