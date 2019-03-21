@@ -1,6 +1,7 @@
 #coding:utf-8
 import pygame
 from pygame.locals import *
+import time
 
 #Création de la fenêtre graphique + insertion de l'image de fond
 res = (800, 450)
@@ -16,8 +17,10 @@ pygame.key.set_repeat(400, 30)
 
 #Initialisation des sons
 clap = pygame.mixer.Sound("LB Clap (4).wav")
-            
-        
+kick = pygame.mixer.Sound("Kick.wav")
+crash = pygame.mixer.Sound("crash.wav")
+snare = pygame.mixer.Sound("Snare.wav")
+
 #Fermeture de la fenêtre lorsque l'on appuie sur la croix rouge
 launched = True                 
 while launched:
@@ -31,6 +34,7 @@ while launched:
             drumbox_image = pygame.image.load("DrumboxKick.png")
             fenetre_drumbox.blit(drumbox_image, [0, 0])
             pygame.display.flip()
+            kick.play()
             
     if event.type == KEYUP and event.key == K_q:
             drumbox_image = pygame.image.load("LaDrumbox.png")
@@ -41,6 +45,7 @@ while launched:
             drumbox_image = pygame.image.load("Drumbox-Snare.png")
             fenetre_drumbox.blit(drumbox_image, [0, 0])
             pygame.display.flip()
+            snare.play()
             
     if event.type == KEYUP and event.key == K_w:
             drumbox_image = pygame.image.load("LaDrumbox.png")
@@ -51,7 +56,7 @@ while launched:
             drumbox_image = pygame.image.load("Drumbox-Crash.png")
             fenetre_drumbox.blit(drumbox_image, [0, 0])
             pygame.display.flip()
-            play.crash()
+            crash.play()
             
     if event.type == KEYUP and event.key == K_a:
             drumbox_image = pygame.image.load("LaDrumbox.png")
@@ -63,11 +68,7 @@ while launched:
             fenetre_drumbox.blit(drumbox_image, [0, 0])
             pygame.display.flip()
             clap.play()
-            son = 0
-            while son < 100:
-                son = son + 1
-            if son == 0:
-                clap.stop()
+            
     if event.type == KEYUP and event.key == K_s:
             drumbox_image = pygame.image.load("LaDrumbox.png")
             fenetre_drumbox.blit(drumbox_image, [0, 0])
@@ -75,4 +76,3 @@ while launched:
 
 
 pygame.quit()
-
