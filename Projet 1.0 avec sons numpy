@@ -2,7 +2,8 @@
 import pygame
 from pygame.locals import *
 import time
-
+import numpy as np
+import sounddevice as sd
 
 
 #Création de la fenêtre graphique
