@@ -2,7 +2,6 @@
 import pygame
 from pygame.locals import *
 import time
-import Fonctions
 
 
 #Création de la fenêtre graphique
@@ -15,7 +14,7 @@ pygame.display.set_caption("Drumbox")
 #Mise en place du fond
 
 fenetre_drumbox = pygame.display.set_mode(res)
-drumbox_image = pygame.image.load("LaDrumbox.png")
+drumbox_image = pygame.image.load("Dossier images Drumbox/LaDrumbox.png")
 fenetre_drumbox.blit(drumbox_image, [0, 0])
 pygame.display.flip()                
 
@@ -25,19 +24,19 @@ pygame.key.set_repeat(400, 30)
 
 #Initialisation des sons
 
-clap = pygame.mixer.Sound("LB Clap (4).wav")
-kick = pygame.mixer.Sound("Kick.wav")
-crash = pygame.mixer.Sound("Crash.wav")
-snare = pygame.mixer.Sound("Snare.wav")
+clap = pygame.mixer.Sound("Dossier sons Drumbox/Clap.wav")
+kick = pygame.mixer.Sound("Dossier sons Drumbox/Kick.wav")
+crash = pygame.mixer.Sound("Dossier sons Drumbox/Crash.wav")
+snare = pygame.mixer.Sound("Dossier sons Drumbox/Snare.wav")
 
 
 #Intitialisation des images
 
-ImgClap = pygame.image.load("Clap.gif")
-ImgKick = pygame.image.load("DrumboxKick.png")
-ImgCrash = pygame.image.load("Drumbox-Crash.png")
-ImgSnare = pygame.image.load("Drumbox-Snare.png")
-ImgDrumbox = pygame.image.load("LaDrumbox.png")
+ImgClap = pygame.image.load("Dossier images Drumbox/Clap.gif")
+ImgKick = pygame.image.load("Dossier images Drumbox/DrumboxKick.png")
+ImgCrash = pygame.image.load("Dossier images Drumbox/Drumbox-Crash.png")
+ImgSnare = pygame.image.load("Dossier images Drumbox/Drumbox-Snare.png")
+ImgDrumbox = pygame.image.load("Dossier images Drumbox/LaDrumbox.png")
 
 
 
@@ -52,7 +51,7 @@ def ChangementFond(drumbox_image):
 
 
 def RetourFond():
-    drumbox_image = pygame.image.load("LaDrumbox.png")
+    drumbox_image = pygame.image.load("Dossier images Drumbox\LaDrumbox.png")
     fenetre_drumbox.blit(drumbox_image, [0, 0])
     pygame.display.flip()
 
