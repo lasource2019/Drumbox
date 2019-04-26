@@ -1,0 +1,75 @@
+#Importation des bibliothèques nécessaires
+import pygame, pygame.mixer, sys
+#Importation des bibliothèques nécessaires
+
+import numpy as np, sounddevice as sd, time
+from pygame.locals import *
+
+#Initialisation de la bibliothèque Pygame
+pygame.init()
+
+#Création de la fenêtre
+fenetre = pygame.display.set_mode((1200, 650))
+fond = pygame.image.load("tab.png").convert()
+fenetre.blit(fond, (0, 500))
+
+
+clap = pygame.mixer.Sound("LB Clap (4).wav")
+snare1 = pygame.image.load("Snare.jpg").convert()
+snare2 = pygame.image.load("Snare.jpg").convert()
+wow = pygame.image.load("wow.jpg").convert()
+snare1 = pygame.transform.scale(snare1, (130, 100))
+snare2 = pygame.transform.scale(snare2, (130, 100))
+wow = pygame.transform.scale(wow, (150, 100))
+
+x1 = 0
+y1 = 0
+x2 = 0
+y2 = 0
+x1a = 1000
+y1a = 1000
+black = (0, 0, 0)
+pygame.display.flip()
+
+continuer = 1
+while continuer:
+    for event in pygame.event.get():
+        
+        if event.type == QUIT:
+            continuer = 0
+
+        if event.type == MOUSEMOTION and event.buttons[0] == 1:
+            x1 = event.pos[0]
+            y1 = event.pos[1]
+            x1a = x1
+            y1a = y1
+
+    
+    fenetre.fill(black)
+    fenetre.blit(fond, (0, 500))
+    fenetre.blit(snare1, (x1, y1))
+    fenetre.blit(snare2, (x2, y2))
+
+    if event.type == KEYDOWN and event.key == K_p:
+           if 130<= x1a < 280:                 
+               sd.default.samplerate = 44100
+               time = 1.0
+               frequency = 440
+               samples = np.arange(44100 * time) / 44100.0
+               onde = 10000 * np.sin(2 * np.pi * frequency * samples)
+               ond_onde = np.array(onde, dtype=np.int16)
+               sd.play(ond_onde, blocking=True)
+
+    if event.type == KEYDOWN and event.key == K_p:
+          if 290<= x1a <= 425:
+              clap.play()
+
+              
+
+         
+        
+    
+       
+          
+
+    pygame.display.flip()
