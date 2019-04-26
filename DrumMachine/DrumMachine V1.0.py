@@ -16,67 +16,99 @@ pygame.mixer.init(14100, -16, 2, 2048)
 #Mise en place du fond
 
 fenetre_drumbox = pygame.display.set_mode(res)
-drumbox_image = pygame.image.load("Images/DrumMachine.png")
+drumbox_image = pygame.image.load("DrumMachine.png")
 fenetre_drumbox.blit(drumbox_image, [0, 0])
 pygame.display.flip()
 
 pygame.key.set_repeat(400, 30)
 
-clavier_image = pygame.image.load("Images/Clavier/Clavier.png")
-fenetre_drumbox.blit(clavier_image, [0, 99])
+clavier_image = pygame.image.load("clavier.png")
+fenetre_drumbox.blit(clavier_image, [0, 70])
 pygame.display.flip()
 
 #Initialisation des sons
 
-clap = pygame.mixer.Sound("Sons/Clap.wav")
-kick = pygame.mixer.Sound("Sons/Kick.wav")
-crash = pygame.mixer.Sound("Sons/crash.wav")
-snare = pygame.mixer.Sound("Sons/Snare.wav")
+clap = pygame.mixer.Sound("Clap.wav")
+kick = pygame.mixer.Sound("Kick.wav")
+crash = pygame.mixer.Sound("crash.wav")
+snare = pygame.mixer.Sound("Snare.wav")
 
 #Intitialisation des images
 
-ImgClap = pygame.image.load("Images/DrumMachine-Hat.png")
-ImgKick = pygame.image.load("Images/DrumMachine-Kick.png")
-ImgCrash = pygame.image.load("Images/DrumMachine-Crash.png")
-ImgSnare = pygame.image.load("Images/DrumMachine-Snare.png")
-ImgDrumbox = pygame.image.load("Images/DrumMachine.png")
+ImgClap = pygame.image.load("DrumMachine-Hat.png")
+ImgKick = pygame.image.load("DrumMachine-Kick.png")
+ImgCrash = pygame.image.load("DrumMachine-Crash.png")
+ImgSnare = pygame.image.load("DrumMachine-Snare.png")
+ImgDrumbox = pygame.image.load("DrumMachine.png")
+
+ImDo = pygame.image.load("ClavierDO.png")
+ImRe = pygame.image.load("ClavierRE.png")
+ImMi = pygame.image.load("ClavierMI.png")
+ImFa = pygame.image.load("ClavierFA.png")
+ImSol = pygame.image.load("ClavierSOL.png")
+ImLa = pygame.image.load("ClavierLA.png")
+ImSi = pygame.image.load("ClavierSI.png")
 
 def Main():
     keydown()
     keyup()
     SonClavierPressé()
+    
+
 
 def SonClavierPressé():    
     
     if event.type == KEYDOWN:
 
         if event.key == K_f:
+            clavier_image = ImDo
+            ChangementClavier(clavier_image)
             frequency = 262
             NoteClavier(frequency)
+
         if event.type == KEYDOWN and event.key == K_g:
+            clavier_image = ImRe
+            ChangementClavier(clavier_image)
             frequency = 293
             NoteClavier(frequency)
+           
         if event.type == KEYDOWN and event.key == K_h:
+            clavier_image = ImMi
+            ChangementClavier(clavier_image)
             frequency = 329
             NoteClavier(frequency)
+            
         if event.type == KEYDOWN and event.key == K_j:
+            clavier_image = ImFa
+            ChangementClavier(clavier_image)
             frequency = 349
             NoteClavier(frequency)
+            
         if event.type == KEYDOWN and event.key == K_k:            
+            clavier_image = ImSol
+            ChangementClavier(clavier_image)
             frequency = 392
             NoteClavier(frequency)
-        if event.type == KEYDOWN and event.key == K_l:                
+            
+        if event.type == KEYDOWN and event.key == K_l:
+            clavier_image = ImLa
+            ChangementClavier(clavier_image)
             frequency = 440
             NoteClavier(frequency)
-
+            
+def ChangementClavier(clavier_image):
+    fenetre_drumbox.blit(clavier_image, [0, 70])
+    pygame.display.flip()
+    
 def ChangementFond(drumbox_image):
     fenetre_drumbox.blit(drumbox_image, [0, 0])
     pygame.display.flip()
 
 def RetourFond():
-    drumbox_image = pygame.image.load("Images/DrumMachine.png")
+    drumbox_image = pygame.image.load("DrumMachine.png")
     fenetre_drumbox.blit(drumbox_image, [0, 0])
     pygame.display.flip()
+
 
 def NoteClavier(frequency):
     sd.default.samplerate = 44100
