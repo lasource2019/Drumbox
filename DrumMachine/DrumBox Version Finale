@@ -5,18 +5,23 @@ import numpy as np
 import sounddevice as sd
 
 
+#Initialiation page d'accueil du programme
+testezDrum = pygame.image.load("images/Testez.png").convert()
+testezDrum = pygame.transform.scale(testezDrum, (230, 100))
+creezMorceau =  pygame.image.load("Images/créezvotremocreau.png").convert()
+creezMorceau = pygame.transform.scale(creezMorceau, (230, 100))
+retour = pygame.image.load("Images/retour.png")
+
+
 #Initialisation de la drumbox et du clavier
 
-
-
-#Création de la fenêtre graphique
-
+#Création de la fenêtre graphique de la partie drumbox
 res = (800, 540)
 pygame.init()
 pygame.display.set_caption("Drumbox")
 pygame.mixer.init(14100, -16, 2, 2048)
 
-#Mise en place du fond
+#Mise en place du fond drumbox
 
 fenetre_drumbox = pygame.display.set_mode(res)
 drumbox_image = pygame.image.load("Images/DrumMachine.png")
@@ -25,13 +30,6 @@ pygame.display.flip()
 
 pygame.key.set_repeat(400, 30)
 
-#Initialiation page d'accueil
-testezDrum = pygame.image.load("images/Testez.png").convert()
-testezDrum = pygame.transform.scale(testezDrum, (230, 100))
-creezMorceau =  pygame.image.load("Images/créezvotremocreau.png").convert()
-creezMorceau = pygame.transform.scale(creezMorceau, (230, 100))
-retour = pygame.image.load("Images/retour.png")
-
 #affichage page d'accueil
 
 fenetre_drumbox.blit(retour, (720, 5))
@@ -39,14 +37,14 @@ fenetre_drumbox.blit(testezDrum,(130, 420))
 fenetre_drumbox.blit(creezMorceau,(450, 420))
 pygame.display.flip()
 
-#Initialisation des sons
+#Initialisation des sons de la drumbox
 
 clap = pygame.mixer.Sound("Sons/Clap.wav")
 kick = pygame.mixer.Sound("Sons/Kick.wav")
 crash = pygame.mixer.Sound("Sons/crash.wav")
 snare = pygame.mixer.Sound("Sons/Snare.wav")
 
-#Intitialisation des images
+#Intitialisation des images drumbox
 
 ImgClap = pygame.image.load("Images/DrumMachine-Hat.png")
 ImgKick = pygame.image.load("Images/DrumMachine-Kick.png")
@@ -62,7 +60,7 @@ ImSol = pygame.image.load("Images/Clavier/ClavierSOL.png")
 ImLa = pygame.image.load("Images/Clavier/ClavierLA.png")
 ImSi = pygame.image.load("Images/Clavier/ClavierSI.png")
 
-#Initialisation du clavier
+#Initialisation des images du clavier
 clavier_image = pygame.image.load("Images/Clavier/Clavier.png")
 x1 = 0
 y1 = 0
@@ -75,13 +73,9 @@ pygame.display.flip()
            
            
            
-           
-           
 #Initialisation du Séquenceur
 
-
-#Initialisation des images
-
+#Initialisation des images du séquenceur
 ImgKick_Sequenceur = pygame.image.load("Images/Seq-Kick.png").convert_alpha()
 ImgSnare_Sequenceur = pygame.image.load("Images/Seq-Snare.png").convert_alpha()
 ImgClap_Sequenceur = pygame.image.load("Images/Seq-Clap.png").convert_alpha()
@@ -98,7 +92,7 @@ selected_clap = 0
 selected_hats = 0
 selected_silence = 0
 
-#Positions des boutons des instruments
+#Positions des boutons des instruments du séquenceur
 posx = [150, 250, 350, 450, 550] 
 posy = [35, 35, 35, 35, 35]
 
@@ -134,9 +128,11 @@ hatssound =pygame.mixer.Sound("Sons/crash.wav")
 sequenceur_x = [125, 205, 285, 365, 445, 525, 605] 
 sequenceur_y = [80, 140]
 
+
+
 #Fonctions de la drumbox et du clavier
 
-def SonClavierPressé():    
+def SonClavierPressé():    #Fonction qui détecte lorsqu'une touche est pressée, qui change l'image et joue le son associé à la note
     
     if event.type == KEYDOWN:
 
@@ -176,11 +172,11 @@ def SonClavierPressé():
             frequency = 440
             NoteClavier(frequency)
             
-def ChangementClavier(clavier_image):
+def ChangementClavier(clavier_image): #Image qui permet de remettre l'image d'origine du clavier lorsque l'on appuie plus dessus
     fenetre_drumbox.blit(clavier_image, [0, 70])
     pygame.display.flip()
     
-def ChangementFond(drumbox_image):
+def ChangementFond(drumbox_image): #Fonction associée à la fonction keydown, prend en argument la variable drumbox_image et remplace l'image précédente
     fenetre_drumbox.blit(drumbox_image, [0, 0])
     pygame.display.flip()
 
@@ -253,14 +249,15 @@ def keyup():          #Fonction qui change le fond et arrête le son quand la to
             if event.key == K_d:
                 RetourFond()
     
-def Batterie_clavier():
+def Batterie_clavier(): #Fonction qui fait office de fonction main pour la partie drumbox/clavier du programme
     keydown()
     keyup()
     SonClavierPressé()
         
         
 #Fonctions du séquenceur
-def BoutonRelacher(position_x,position_y, instrument):
+
+def BoutonRelacher(position_x,position_y, instrument): #Fonction qui permet que lorsqu'on relache le clic de la souris, l'image que l'on dépose se positionne au niveau du curseur de la souris
     screen.blit(img_fond, (0,0))
     screen.blit(sequenceur_img,(100, 70))
     screen.blit(instrument,(position_x-35,position_y-25))
@@ -279,21 +276,22 @@ def Detection_Sequenceur(instrument_son, instrument, position_x_instrument, posi
             Magnet(instrument, sequenceur_x[case], sequenceur_y[1])
             sequenceur[case + 6] = instrument_son
 
-def Son(instrument):
+def Son(instrument): #Fonction qui permet un rapide changement de variable pour le son
     son = instrument
+    return
 
-def Magnet(instrument, case_x, case_y):
+def Magnet(instrument, case_x, case_y): #Fonction qui va avec la fonction Detection_Sequenceur. Elle gère l'affichage de l'image, et la "colle" à la case
     screen.blit(img_fond, (0,0))
     screen.blit(sequenceur_img,(100, 70))
     screen.blit(instrument,(case_x, case_y))
     pygame.display.flip()
 
-def SourisMouvement(instrument, instrument_position):
+def SourisMouvement(instrument, instrument_position): #Fonction qui permet que l'image surlaquelle on clique suive les mouvements de la souris
     r = screen.blit(screen, instrument_position, instrument_position)
     instrument_position.move_ip(event.rel) #a chaque fois il y a mouvement de souris, le personnage prend la nouvelle position du curseur
     pygame.display.update((r,screen.blit(instrument, instrument_position)))
 
-def ChangementImgSequenceur():
+def ChangementImgSequenceur(): #Fonction qui met en place tous les éléments graphiques de la partie séquenceur du programme
     global poscasex_kick, poscasey_kick, poscasex_snare, poscasey_snare, poscasex_clap, poscasey_clap, poscasex_hats, poscasey_hats, poscasex_silence, poscasey_silence
     screen.blit(img_fond, (0,0))  
     screen.blit(sequenceur_img,(100, 70))
@@ -315,8 +313,7 @@ def ChangementImgSequenceur():
     poscasex_silence = posx[4] - 35
     poscasey_silence = posy[4] - 25
 
-def SequenceurBoutonPressé():
-    #joue le son quand on appuie sur P
+def SequenceurAction():     #joue le son du séquenceur quand on appuie sur P
     if event.type == KEYDOWN and event.key == K_p:
         for loop in range(14):
             if sequenceur[loop] == 1:
