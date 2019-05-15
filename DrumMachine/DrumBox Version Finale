@@ -1,0 +1,451 @@
+import pygame
+from pygame.locals import *
+import time
+import numpy as np
+import sounddevice as sd
+
+
+#Initialisation de la drumbox et du clavier
+
+
+
+#Création de la fenêtre graphique
+
+res = (800, 540)
+pygame.init()
+pygame.display.set_caption("Drumbox")
+pygame.mixer.init(14100, -16, 2, 2048)
+
+#Mise en place du fond
+
+fenetre_drumbox = pygame.display.set_mode(res)
+drumbox_image = pygame.image.load("Images/DrumMachine.png")
+fenetre_drumbox.blit(drumbox_image, [0, 0])
+pygame.display.flip()
+
+pygame.key.set_repeat(400, 30)
+
+#Initialiation page d'accueil
+testezDrum = pygame.image.load("images/Testez.png").convert()
+testezDrum = pygame.transform.scale(testezDrum, (230, 100))
+creezMorceau =  pygame.image.load("Images/créezvotremocreau.png").convert()
+creezMorceau = pygame.transform.scale(creezMorceau, (230, 100))
+retour = pygame.image.load("Images/retour.png")
+
+#affichage page d'accueil
+
+fenetre_drumbox.blit(retour, (720, 5))
+fenetre_drumbox.blit(testezDrum,(130, 420))
+fenetre_drumbox.blit(creezMorceau,(450, 420))
+pygame.display.flip()
+
+#Initialisation des sons
+
+clap = pygame.mixer.Sound("Sons/Clap.wav")
+kick = pygame.mixer.Sound("Sons/Kick.wav")
+crash = pygame.mixer.Sound("Sons/crash.wav")
+snare = pygame.mixer.Sound("Sons/Snare.wav")
+
+#Intitialisation des images
+
+ImgClap = pygame.image.load("Images/DrumMachine-Hat.png")
+ImgKick = pygame.image.load("Images/DrumMachine-Kick.png")
+ImgCrash = pygame.image.load("Images/DrumMachine-Crash.png")
+ImgSnare = pygame.image.load("Images/DrumMachine-Snare.png")
+ImgDrumbox = pygame.image.load("Images/DrumMachine.png")
+
+ImDo = pygame.image.load("Images/Clavier/ClavierDO.png")
+ImRe = pygame.image.load("Images/Clavier/ClavierRE.png")
+ImMi = pygame.image.load("Images/Clavier/ClavierMI.png")
+ImFa = pygame.image.load("Images/Clavier/ClavierFA.png")
+ImSol = pygame.image.load("Images/Clavier/ClavierSOL.png")
+ImLa = pygame.image.load("Images/Clavier/ClavierLA.png")
+ImSi = pygame.image.load("Images/Clavier/ClavierSI.png")
+
+#Initialisation du clavier
+clavier_image = pygame.image.load("Images/Clavier/Clavier.png")
+x1 = 0
+y1 = 0
+x2 = 0
+y2 = 0
+x1a = 1000
+y1a = 1000
+black = (0, 0, 0)
+pygame.display.flip()
+           
+           
+           
+           
+           
+#Initialisation du Séquenceur
+
+
+#Initialisation des images
+
+ImgKick_Sequenceur = pygame.image.load("Images/Seq-Kick.png").convert_alpha()
+ImgSnare_Sequenceur = pygame.image.load("Images/Seq-Snare.png").convert_alpha()
+ImgClap_Sequenceur = pygame.image.load("Images/Seq-Clap.png").convert_alpha()
+ImgHats_Sequenceur = pygame.image.load("Images/Seq-Hats.png").convert_alpha()
+ImgSilence_Sequenceur = pygame.image.load("Images/Seq-Silence.png").convert_alpha()
+img_fond = pygame.image.load("Images/FondPapier.png").convert_alpha()
+sequenceur_img = pygame.image.load("Images/Fond.png").convert_alpha()
+
+
+#Correspond à l'évènement de sélection d'image. Quand selected = 0, l'image n'est pas sélectionnée, quand selected = 1, l'image est sélectionnée
+selected_kick = 0      
+selected_snare = 0
+selected_clap = 0
+selected_hats = 0
+selected_silence = 0
+
+#Positions des boutons des instruments
+posx = [150, 250, 350, 450, 550] 
+posy = [35, 35, 35, 35, 35]
+
+
+
+
+#Position des boutons des instruments lorsque la souris est relâchée
+poscasex_kick = posx[0] - 35
+poscasey_kick = posy[0] - 25
+poscasex_snare = posx[1] - 35
+poscasey_snare = posy[1] - 25
+poscasex_clap = posx[2] - 35
+poscasey_clap = posy[2] - 25
+poscasex_hats = posx[3] - 35
+poscasey_hats = posy[3] - 25
+poscasex_silence = posx[4] - 35
+poscasey_silence = posy[4] - 25
+
+#Initialisation des sons du séquenceur
+son = 0
+kickson = 1
+snareson = 2
+clapson = 3
+hatsson = 4
+silenceson = 5
+sequenceur = [0] * 14
+kicksound = pygame.mixer.Sound("Sons/Kick.wav")
+snaresound = pygame.mixer.Sound("Sons/Snare.wav")
+clapsound = pygame.mixer.Sound("Sons/Clap.wav")
+hatssound =pygame.mixer.Sound("Sons/crash.wav")
+
+#Listes des coordonnées des cases du séquenceur
+sequenceur_x = [125, 205, 285, 365, 445, 525, 605] 
+sequenceur_y = [80, 140]
+
+#Fonctions de la drumbox et du clavier
+
+def SonClavierPressé():    
+    
+    if event.type == KEYDOWN:
+
+        if event.key == K_f:
+            clavier_image = ImDo
+            ChangementClavier(clavier_image)
+            frequency = 262
+            NoteClavier(frequency)
+
+        if event.type == KEYDOWN and event.key == K_g:
+            clavier_image = ImRe
+            ChangementClavier(clavier_image)
+            frequency = 293
+            NoteClavier(frequency)
+           
+        if event.type == KEYDOWN and event.key == K_h:
+            clavier_image = ImMi
+            ChangementClavier(clavier_image)
+            frequency = 329
+            NoteClavier(frequency)
+            
+        if event.type == KEYDOWN and event.key == K_j:
+            clavier_image = ImFa
+            ChangementClavier(clavier_image)
+            frequency = 349
+            NoteClavier(frequency)
+            
+        if event.type == KEYDOWN and event.key == K_k:            
+            clavier_image = ImSol
+            ChangementClavier(clavier_image)
+            frequency = 392
+            NoteClavier(frequency)
+            
+        if event.type == KEYDOWN and event.key == K_l:
+            clavier_image = ImLa
+            ChangementClavier(clavier_image)
+            frequency = 440
+            NoteClavier(frequency)
+            
+def ChangementClavier(clavier_image):
+    fenetre_drumbox.blit(clavier_image, [0, 70])
+    pygame.display.flip()
+    
+def ChangementFond(drumbox_image):
+    fenetre_drumbox.blit(drumbox_image, [0, 0])
+    pygame.display.flip()
+
+def RetourFond():
+    drumbox_image = pygame.image.load("Images/DrumMachine.png")
+    fenetre_drumbox.blit(drumbox_image, [0, 0])
+    pygame.display.flip()
+
+
+def NoteClavier(frequency):
+    sd.default.samplerate = 44100
+    # on définit le temps
+    time = 1.0
+    samples = np.arange(44100 * time) / 44100.0
+    # on convertit en onde sinusoïdale de fréquence f de formule w(t) = A*sin(2*pi*f*t)
+    onde = 10000 * np.sin(2 * np.pi * frequency * samples)
+    # on converit en format onde (16 bits)
+    ond_onde = np.array(onde, dtype=np.int16)
+    sd.play(ond_onde, blocking=True)
+
+
+def keydown():        #Fonction qui affecte des touches aux sons et au changement de fond quand la touche est pressée
+
+        if event.type == KEYDOWN:
+    
+            if event.key == K_q:
+                kick.play()
+                drumbox_image = ImgKick
+                ChangementFond(drumbox_image)
+            if event.key == K_w:
+                snare.play()
+                drumbox_image = ImgSnare
+                ChangementFond(drumbox_image)
+            if event.key == K_a:
+                crash.play
+                drumbox_image = ImgCrash
+                ChangementFond(drumbox_image)
+            if event.key == K_s:
+                clap.play()
+                drumbox_image = ImgClap
+                ChangementFond(drumbox_image)
+            if event.key == K_e:
+                
+                drumbox_image = ImgTom1
+                ChangementFond(drumbox_image)
+            if event.key == K_d:
+                drumbox_image = ImgTom2
+                ChangementFond(drumbox_image)
+    
+def keyup():          #Fonction qui change le fond et arrête le son quand la touche est relachée
+          
+        if event.type == KEYUP:
+    
+            if event.key == K_q:
+                kick.stop()
+                RetourFond()
+            if event.key == K_w:
+                snare.stop()
+                RetourFond()
+            if event.key == K_a:
+                crash.stop()
+                RetourFond()
+                pygame.display.flip()
+            if event.key == K_s:
+                clap.stop()
+                RetourFond()
+            if event.key == K_e:
+                RetourFond()
+    
+            if event.key == K_d:
+                RetourFond()
+    
+def Batterie_clavier():
+    keydown()
+    keyup()
+    SonClavierPressé()
+        
+        
+#Fonctions du séquenceur
+def BoutonRelacher(position_x,position_y, instrument):
+    screen.blit(img_fond, (0,0))
+    screen.blit(sequenceur_img,(100, 70))
+    screen.blit(instrument,(position_x-35,position_y-25))
+    pygame.display.flip()
+    return
+
+#Fonction qui définit "l'aimentation" sur les cases du séquenceur
+def Detection_Sequenceur(instrument_son, instrument, position_x_instrument, position_y_instrument):
+
+    for case in range(7):
+        if sequenceur_x[case] + 70 >= position_x_instrument >= sequenceur_x[case] and sequenceur_y[0] + 50 >= position_y_instrument >= sequenceur_y[0]:
+            Magnet(instrument, sequenceur_x[case], sequenceur_y[0])
+            sequenceur[case] = instrument_son
+    for case in range(7):
+        if sequenceur_x[case] + 70 >= position_x_instrument >= sequenceur_x[case] and sequenceur_y[1] + 50 >= position_y_instrument >= sequenceur_y[1]:
+            Magnet(instrument, sequenceur_x[case], sequenceur_y[1])
+            sequenceur[case + 6] = instrument_son
+
+def Son(instrument):
+    son = instrument
+
+def Magnet(instrument, case_x, case_y):
+    screen.blit(img_fond, (0,0))
+    screen.blit(sequenceur_img,(100, 70))
+    screen.blit(instrument,(case_x, case_y))
+    pygame.display.flip()
+
+def SourisMouvement(instrument, instrument_position):
+    r = screen.blit(screen, instrument_position, instrument_position)
+    instrument_position.move_ip(event.rel) #a chaque fois il y a mouvement de souris, le personnage prend la nouvelle position du curseur
+    pygame.display.update((r,screen.blit(instrument, instrument_position)))
+
+def ChangementImgSequenceur():
+    global poscasex_kick, poscasey_kick, poscasex_snare, poscasey_snare, poscasex_clap, poscasey_clap, poscasex_hats, poscasey_hats, poscasex_silence, poscasey_silence
+    screen.blit(img_fond, (0,0))  
+    screen.blit(sequenceur_img,(100, 70))
+    screen.blit(ImgKick_Sequenceur, (poscasex_kick, poscasey_kick))
+    screen.blit(ImgSnare_Sequenceur, (poscasex_snare, poscasey_snare))
+    screen.blit(ImgClap_Sequenceur, (poscasex_clap, poscasey_clap))
+    screen.blit(ImgHats_Sequenceur, (poscasex_hats, poscasey_hats))
+    screen.blit(ImgSilence_Sequenceur, (poscasex_silence, poscasey_silence))
+    pygame.display.flip()
+    
+    poscasex_kick = posx[0] - 35
+    poscasey_kick = posy[0] - 25
+    poscasex_snare = posx[1] - 35
+    poscasey_snare = posy[1] - 25
+    poscasex_clap = posx[2] - 35
+    poscasey_clap = posy[2] - 25
+    poscasex_hats = posx[3] - 35
+    poscasey_hats = posy[3] - 25
+    poscasex_silence = posx[4] - 35
+    poscasey_silence = posy[4] - 25
+
+def SequenceurBoutonPressé():
+    #joue le son quand on appuie sur P
+    if event.type == KEYDOWN and event.key == K_p:
+        for loop in range(14):
+            if sequenceur[loop] == 1:
+                kicksound.play()
+                time.sleep(0.3)
+            if sequenceur[loop] == 2:
+                snaresound.play()
+                time.sleep(0.3)
+            if sequenceur[loop] == 3:
+                clapsound.play()
+                time.sleep(0.3)
+            if sequenceur[loop] == 4:
+                hatssound.play()
+                time.sleep(0.3)
+            if sequenceur[loop] == 5:
+                time.sleep(0.5)
+
+def MainSequenceur():
+    global selected_kick, selected_snare, selected_clap, selected_hats, selected_silence
+    ChangementImgSequenceur()
+# boucle déplacement d'image pour le KICK
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and kick_position.collidepoint(event.pos):
+        selected_kick = 1
+        
+    elif event.type == pygame.MOUSEBUTTONUP and event.button == 1 and selected_kick == 1:
+        posx[0],posy[0] = pygame.mouse.get_pos()
+        BoutonRelacher(posx[0],posy[0], ImgKick_Sequenceur)
+        selected_kick = 0
+        Detection_Sequenceur(kickson, ImgKick_Sequenceur, posx[0], posy[0])
+
+    elif event.type == MOUSEMOTION and selected_kick == 1:
+        SourisMouvement(ImgKick_Sequenceur, kick_position)
+
+        
+# boucle déplacement d'image pour le SNARE
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and snare_position.collidepoint(event.pos):
+        selected_snare = 1
+        
+    elif event.type == pygame.MOUSEBUTTONUP and event.button == 1 and selected_snare == 1:
+        posx[1],posy[1] = pygame.mouse.get_pos()
+        BoutonRelacher(posx[1],posy[1], ImgSnare_Sequenceur)
+        selected_snare = 0
+        Detection_Sequenceur(snareson, ImgSnare_Sequenceur, posx[1], posy[1])
+            
+    elif event.type == MOUSEMOTION and selected_snare == 1:
+        SourisMouvement(ImgSnare_Sequenceur, snare_position)
+        
+# boucle déplacement d'image pour le CLAP
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and clap_position.collidepoint(event.pos):
+        selected_clap = 1
+        
+    elif event.type == pygame.MOUSEBUTTONUP and event.button == 1 and selected_clap == 1:
+        posx[2],posy[2] = pygame.mouse.get_pos()
+        BoutonRelacher(posx[2],posy[2], ImgClap_Sequenceur)
+        selected_clap = 0
+        Detection_Sequenceur(clapson, ImgClap_Sequenceur, posx[2], posy[2])
+            
+    elif event.type == MOUSEMOTION and selected_clap == 1:
+        SourisMouvement(ImgClap_Sequenceur, clap_position)
+        
+# boucle déplacement d'image pour les HATS
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and hats_position.collidepoint(event.pos):
+        selected_hats = 1
+        
+    elif event.type == pygame.MOUSEBUTTONUP and event.button == 1 and selected_hats == 1:
+        posx[3],posy[3] = pygame.mouse.get_pos()
+        BoutonRelacher(posx[3],posy[3], ImgHats_Sequenceur)
+        selected_hats = 0
+        Detection_Sequenceur(hatsson, ImgHats_Sequenceur, posx[3], posy[3])
+            
+    elif event.type == MOUSEMOTION and selected_hats == 1:
+        SourisMouvement(ImgHats_Sequenceur, hats_position)
+        
+# boucle déplacement d'image pour le SILENCE
+    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and silence_position.collidepoint(event.pos):
+        selected_silence = 1
+        
+    elif event.type == pygame.MOUSEBUTTONUP and event.button == 1 and selected_silence == 1:
+        posx[4],posy[4] = pygame.mouse.get_pos()
+        BoutonRelacher(posx[4],posy[4], ImgSilence_Sequenceur)
+        selected_silence = 0
+        Detection_Sequenceur(silenceson, ImgSilence_Sequenceur, posx[4], posy[4])
+            
+    elif event.type == MOUSEMOTION and selected_silence == 1:
+        SourisMouvement(ImgSilence_Sequenceur, silence_position)
+
+    SequenceurBoutonPressé()   
+        
+continuer = 1
+while continuer:
+    for event in pygame.event.get():
+
+        if event.type == QUIT:
+            continuer = 0
+            
+        if event.type == MOUSEBUTTONDOWN and event.button == 1:
+            x1 = event.pos[0]
+            y1 = event.pos[1]
+
+
+#initialisation dans le case où est pressée la case "testez la batterie et le clavier")                
+            if 130 <= x1 <= 360 and 420 <= y1 <= 520:
+                fenetre_drumbox = pygame.display.set_mode(res)#on ouvre une nouvelle fenêtre
+                drumbox_image = pygame.image.load("Images/DrumMachine.png")
+                fenetre_drumbox.blit(drumbox_image, [0, 0])
+                pygame.display.flip()
+                fenetre_drumbox.blit(clavier_image, [0, 70])
+                pygame.display.flip()
+                launched = True
+                while launched:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:   #Fermeture de la fenêtre lorsque l'on appuie sur la croix rouge
+                            launched = False
+                        Batterie_clavier()
+            elif 230 <= x1 <= 560 and 420 <= y1 <= 520:
+                res_sequenceur = (800, 250)
+                pygame.init()
+                pygame.display.set_caption("Sequenceur")
+                screen = pygame.display.set_mode(res_sequenceur)
+                kick_position = screen.blit(ImgKick_Sequenceur,(posx[0],posy[0]))
+                snare_position = screen.blit(ImgSnare_Sequenceur, (posx[1], posy[1]))
+                clap_position = screen.blit(ImgClap_Sequenceur, (posx[2], posy[2]))
+                hats_position = screen.blit(ImgHats_Sequenceur, (posx[3], posy[3]))
+                silence_position = screen.blit(ImgSilence_Sequenceur, (posx[4], posy[4]))
+                
+                launched = True
+                while launched:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:   #Fermeture de la fenêtre lorsque l'on appuie sur la croix rouge
+                            launched = False
+                        MainSequenceur()
+pygame.quit()
