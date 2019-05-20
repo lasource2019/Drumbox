@@ -66,10 +66,8 @@ ImSi = pygame.image.load("Images/Clavier/ClavierSI.png")
 clavier_image = pygame.image.load("Images/Clavier/Clavier.png")
 x1 = 0
 y1 = 0
-x2 = 0
-y2 = 0
-x1a = 1000
-y1a = 1000
+
+
 black = (0, 0, 0)
 pygame.display.flip()
            
@@ -189,18 +187,17 @@ def RetourFond():
     fenetre_drumbox.blit(drumbox_image, [0, 0])
     pygame.display.flip()
 
-
-def NoteClavier(frequency):
-    sd.default.samplerate = 44100
-    # on définit le temps
-    time = 1.0
-    samples = np.arange(44100 * time) / 44100.0
-    # on convertit en onde sinusoïdale de fréquence f de formule w(t) = A*sin(2*pi*f*t)
-    onde = 10000 * np.sin(2 * np.pi * frequency * samples)
-    # on converit en format onde (16 bits)
-    ond_onde = np.array(onde, dtype=np.int16)
-    sd.play(ond_onde, blocking=True)
-
+def NoteClavier(frequence):#fonction qui traite les données numériques pour créer un son. Variable : fréquence du son.
+    
+    # assignation de valeurs aux caractéristiques du signal analogique
+    amplitude = 10000
+    time = 1.0 # on définit le temps d'une note (1 seconde)
+    
+    # élaboration du signal numérique
+    echantillonnage = np.arange(0, time, 1/44100) # définition de la fréquence d'echantillonage 
+    onde = amplitude * np.sin(2 * np.pi * frequence * echantillonnage)# création du signal numérique de formule : onde = amplitude*sin(2*pi*fréquence*échantillonage)
+    ond_onde = np.array(onde, dtype=np.int16) # conversion en format onde que l'on code sur 16 bits
+    sd.play(ond_onde, blocking=True) # on convertit le signal numérique en son
 
 def keydown():        #Fonction qui affecte des touches aux sons et au changement de fond quand la touche est pressée
 
