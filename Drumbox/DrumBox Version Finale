@@ -403,7 +403,7 @@ while continuer:
             y1 = event.pos[1]
 
 
-#initialisation dans le case où est pressée la case "testez la batterie et le clavier")                
+#affichage de la fenêtre de la drumbox quand est pressée la case "testez la batterie et le clavier"             
             if 130 <= x1 <= 360 and 420 <= y1 <= 520:
                 fenetre_drumbox = pygame.display.set_mode(res)#on ouvre une nouvelle fenêtre
                 drumbox_image = pygame.image.load("Images/DrumMachine.png")
